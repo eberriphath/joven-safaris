@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 from app.config import config
+from app.extensions import db
 
 def create_app():
     app = Flask(__name__)
@@ -9,10 +10,9 @@ def create_app():
 
     CORS(app)
 
-    @app.route("/")
-    def home():
-        return {
-            "message" : "Backend api running"
-            }
+    db.init_app(app)
+
+    from app.routes.home import home_bp
+    app.register_blueprint(home_bp)
 
     return app    
