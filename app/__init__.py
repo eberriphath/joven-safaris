@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 from app.config import config
-from app.extensions import db
+from app.extensions import db, migrate
 from app.routes.bookings import bookings_bp
 
 def create_app():
@@ -14,9 +14,7 @@ def create_app():
     app.register_blueprint(bookings_bp, url_prefix="/api")
 
     db.init_app(app)
-
-    with app.app_context():
-        db.create_all()
+    migrate.init_app(app, db)
 
     from app.routes.home import home_bp
     app.register_blueprint(home_bp)
