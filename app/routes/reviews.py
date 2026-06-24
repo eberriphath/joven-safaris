@@ -71,3 +71,4 @@ def approve_review(review_id):
     return jsonify({
         "message": "Review approved successfully"
     })
+

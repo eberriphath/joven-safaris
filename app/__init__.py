@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 from app.config import config
-from app.extensions import db, migrate
+from app.extensions import db, migrate , mail
 from app.routes.bookings import bookings_bp
 from app.routes.reviews import reviews_bp
 from app.models.review import Review
@@ -19,6 +19,7 @@ def create_app():
 
     db.init_app(app)
     migrate.init_app(app, db)
+    mail.init_app(app)
 
     from app.routes.home import home_bp
     app.register_blueprint(home_bp)
