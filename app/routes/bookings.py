@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.models.booking import Booking
 from app.extensions import db
+from app.utils.email import send_booking_notification
 
 bookings_bp = Blueprint("bookings", __name__)
 
@@ -26,6 +27,8 @@ def create_booking():
 
     db.session.add(booking)
     db.session.commit()
+    send_booking_notification(booking)
+
     return jsonify({
         "message": "Booking received successfully",
         "booking_id": booking.id
