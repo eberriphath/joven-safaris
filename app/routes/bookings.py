@@ -22,7 +22,7 @@ def create_booking():
         travel_date=data.get("travel_date"),
         number_of_people=data["number_of_people"],
         number_of_nights=data["number_of_nights"],
-        special_requests=data.get("special requests")
+        special_requests=data.get("special_requests")
     )
 
     db.session.add(booking)
@@ -33,3 +33,4 @@ def create_booking():
         "message": "Booking received successfully",
         "booking_id": booking.id
     }), 201
+

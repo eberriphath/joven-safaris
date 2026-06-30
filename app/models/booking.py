@@ -1,5 +1,6 @@
 from datetime import datetime
 from app.extensions import db
+from app.constants.statuses import BOOKING_STATUSES
 
 class Booking(db.Model):
     __tablename__ = "bookings"
@@ -18,6 +19,6 @@ class Booking(db.Model):
 
     special_requests = db.Column(db.Text, nullable=True)
 
-    status = db.Column(db.String(20), default="pending")  
+    status = db.Column(db.String(20), default="pending", nullable=False)
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
