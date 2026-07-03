@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify
 from app.extensions import db
 from app.models.review import Review
+from app.utils.auth import admin_required
 
 admin_reviews_bp = Blueprint("admin_reviews", __name__)
 

@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.extensions import db
 from app.models.booking import Booking
+from app.utils.auth import admin_required
 
 admin_bookings_bp = Blueprint("admin_bookings", __name__)
 
@@ -8,10 +9,11 @@ ALLOWED_STATUSES = {
     "pending",
     "confirmed",
     "completed",
-    "cancelled",
+    "cancelled"
 }
 
 @admin_bookings_bp.route("/admin/bookings", methods=["GET"])
+@admin_required
 def get_all_bookings():
 
     bookings = Booking.query.order_by(
@@ -35,6 +37,7 @@ def get_all_bookings():
     ])
 
 @admin_bookings_bp.route("/admin/bookings/<int:booking_id>/status", methods=["PUT"])
+@admin_required
 def update_booking_status(booking_id):
 
     booking = Booking.query.get_or_404(booking_id)
