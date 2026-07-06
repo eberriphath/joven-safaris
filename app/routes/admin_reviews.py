@@ -6,6 +6,7 @@ from app.utils.auth import admin_required
 admin_reviews_bp = Blueprint("admin_reviews", __name__)
 
 @admin_reviews_bp.route("/admin/reviews", methods=["GET"])
+@admin_required
 def get_all_reviews():
 
     reviews = Review.query.order_by(
@@ -24,7 +25,21 @@ def get_all_reviews():
         for review in reviews
     ])
 
+@admin_reviews_bp.route("/admin/reviews/<int:review_id>", methods=["DELETE"])
+@admin_required
+def delete_review(review_id):
+
+    review = Review.query.get_or_404(review_id)
+
+    db.session.delete(review)
+    db.session.commit()
+
+    return jsonify({
+        "message": "Review deleted successfully"
+    })
+
 @admin_reviews_bp.route("/admin/reviews/<int:review_id>/approve", methods=["PUT"])
+@admin_required
 def approve_review(review_id):
 
     review = Review.query.get_or_404(review_id)

@@ -6,13 +6,27 @@ reviews_bp = Blueprint("reviews", __name__)
 
 @reviews_bp.route("/reviews", methods=["POST"])
 def create_review():
+
     data = request.get_json()
-    
+
+    message = data.get("message", "")
+
+    if len(message) > 500:
+        return jsonify({
+            "error": "Review message cannot exceed 500 characters"
+        }), 400
+
+    if len(message.strip()) < 10:
+        return jsonify({
+            "error": "Review message is too short"
+        }), 400
+
+
     review = Review(
         name=data.get("name"),
         location=data.get("location"),
         rating=data.get("rating"),
-        message=data.get("message"),
+        message=message,
         approved=False
     )
 
@@ -20,8 +34,8 @@ def create_review():
     db.session.commit()
 
     return jsonify({
-        "message": "Review submitted successfully.Awaiting approval",
-        "review_id":review.id
+        "message": "Review submitted successfully. Awaiting approval",
+        "review_id": review.id
     }), 201
 
 @reviews_bp.route("/reviews", methods=["GET"])
