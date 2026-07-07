@@ -11,6 +11,9 @@ from app.routes.admin_reviews import admin_reviews_bp
 from app.models.admin import Admin
 from app.routes.admin_auth import admin_auth_bp
 from app.routes.admin_dashboard import admin_dashboard_bp
+from app.models.package import Package
+from app.routes.admin_packages import admin_packages_bp
+from app.routes.packages import packages_bp
 
 def create_app():
     app = Flask(__name__)
@@ -25,6 +28,9 @@ def create_app():
     app.register_blueprint(admin_reviews_bp, url_prefix="/api")
     app.register_blueprint(admin_auth_bp, url_prefix="/api")
     app.register_blueprint(admin_dashboard_bp ,url_prefix="/api")
+    app.register_blueprint(admin_packages_bp, url_prefix="/api")
+    app.register_blueprint(packages_bp, url_prefix="/api")
+
 
     db.init_app(app)
     migrate.init_app(app, db)
