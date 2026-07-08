@@ -28,3 +28,22 @@ def get_public_packages():
         }
         for package in packages
     ])
+
+
+@packages_bp.route("/packages/<int:id>", methods=["GET"])
+def get_single_package(id):
+
+    package = Package.query.get_or_404(id)
+
+
+    return jsonify({
+
+        "id": package.id,
+        "title": package.title,
+        "destination": package.destination,
+        "duration": package.duration,
+        "price": package.price,
+        "description": package.description,
+        "image_url": package.image_url
+
+    })    
