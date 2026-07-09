@@ -20,5 +20,11 @@ Phone: {booking.phone}
 Destination: {booking.destination}
 People: {booking.number_of_people}
 Nights: {booking.number_of_nights}
+
+{booking.special_requests or "No special requests"}
+
+{booking.status}
+
+{booking.created_at}
 """
     mail.send(msg)
