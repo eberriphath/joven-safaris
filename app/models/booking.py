@@ -66,7 +66,7 @@ class Booking(db.Model):
     )
 
 
-    expected_travel_time = db.Column(
+    expected_travel_date = db.Column(
         db.String(50),
         nullable=True
     )
