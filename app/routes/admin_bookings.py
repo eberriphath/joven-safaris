@@ -27,8 +27,25 @@ def get_all_bookings():
             "phone": booking.phone,
             "destination": booking.destination,
             "travel_date": booking.travel_date,
-            "number_of_people": booking.number_of_people,
+
+            "passport_number": booking.passport_number,
+            "date_of_birth": booking.date_of_birth,
+            "country_of_origin": booking.country_of_origin,
+
+            "expected_travel_time": booking.expected_travel_time,
+
+            "resident_adults": booking.resident_adults,
+            "resident_children": booking.resident_children,
+
+            "non_resident_adults": booking.non_resident_adults,
+            "non_resident_children": booking.non_resident_children,
+
             "number_of_nights": booking.number_of_nights,
+
+            "emergency_contact_name": booking.emergency_contact_name,
+            "emergency_contact_phone": booking.emergency_contact_phone,
+            "emergency_contact_relationship": booking.emergency_contact_relationship,
+            
             "special_requests": booking.special_requests,
             "status": booking.status,
             "created_at": booking.created_at

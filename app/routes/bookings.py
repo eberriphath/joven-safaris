@@ -28,7 +28,7 @@ def create_booking():
         "full_name",
         "email",
         "phone",
-        "passport_number"
+        "passport_number",
         "destination",
         "number_of_nights"
 
