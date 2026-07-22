@@ -15,23 +15,27 @@ bookings_bp = Blueprint(
 @bookings_bp.route("/book", methods=["POST"])
 def create_booking():
 
-
     data = request.get_json()
 
 
 
+    # =========================
+    # REQUIRED FIELDS
+    # =========================
+
     required_fields = [
+
         "full_name",
         "email",
         "phone",
+        "passport_number"
         "destination",
-        "number_of_people",
         "number_of_nights"
+
     ]
 
 
 
-    # Validate required fields
     for field in required_fields:
 
         if not data.get(field):
@@ -45,13 +49,18 @@ def create_booking():
 
 
 
-
     try:
 
 
-        # Create booking record
+        # =========================
+        # CREATE BOOKING
+        # =========================
 
         booking = Booking(
+
+
+
+            # PERSONAL INFORMATION
 
             full_name=data["full_name"],
 
@@ -59,22 +68,98 @@ def create_booking():
 
             phone=data["phone"],
 
+            passport_number=data.get(
+                "passport_number"
+            ),
+
+            date_of_birth=data.get(
+                "date_of_birth"
+            ),
+
+            country_of_origin=data.get(
+                "country_of_origin"
+            ),
+
+
+
+
+            # TRAVEL INFORMATION
+
             destination=data["destination"],
 
-            travel_date=data.get("travel_date"),
+            travel_date=data.get(
+                "travel_date"
+            ),
 
-            number_of_people=data["number_of_people"],
+            expected_travel_time=data.get(
+                "expected_travel_time"
+            ),
 
             number_of_nights=data["number_of_nights"],
 
-            special_requests=data.get("special_requests")
+            accommodation_preference=data.get(
+                "accommodation_preference"
+            ),
+
+
+
+
+            # TRAVELLER INFORMATION
+
+            resident_adults=data.get(
+                "resident_adults",
+                0
+            ),
+
+            resident_children=data.get(
+                "resident_children",
+                0
+            ),
+
+            non_resident_adults=data.get(
+                "non_resident_adults",
+                0
+            ),
+
+            non_resident_children=data.get(
+                "non_resident_children",
+                0
+            ),
+
+
+
+
+            # EMERGENCY CONTACT
+
+            emergency_contact_name=data.get(
+                "emergency_contact_name"
+            ),
+
+            emergency_contact_phone=data.get(
+                "emergency_contact_phone"
+            ),
+
+            emergency_contact_relationship=data.get(
+                "emergency_contact_relationship"
+            ),
+
+
+
+
+            # ADDITIONAL
+
+            special_requests=data.get(
+                "special_requests"
+            )
 
         )
 
 
 
 
-        # Save booking
+        # =========================
+        # SAVE BOOKING
+        # =========================
 
         db.session.add(booking)
 
@@ -83,11 +168,9 @@ def create_booking():
 
 
 
-
-        # Send admin notification email
-
-        send_booking_notification(booking)
-
+        send_booking_notification(
+            booking
+        )
 
 
 
