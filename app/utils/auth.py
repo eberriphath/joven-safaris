@@ -32,6 +32,8 @@ def admin_required(f):
             if not admin:
                 return jsonify({"error": "Invalid token"}), 401
 
+            request.admin = admin
+
         except jwt.ExpiredSignatureError:
             return jsonify({"error": "Token expired"}), 401
 
