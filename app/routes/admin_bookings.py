@@ -76,3 +76,20 @@ def update_booking_status(booking_id):
         "booking_id": booking.id,
         "status": booking.status
     })
+
+@admin_bookings_bp.route(
+    "/admin/bookings/<int:booking_id>",
+    methods=["DELETE"]
+)
+@admin_required
+def delete_booking(booking_id):
+
+    booking = Booking.query.get_or_404(booking_id)
+
+    db.session.delete(booking)
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "Booking deleted successfully"
+    })

@@ -16,12 +16,6 @@ def create_review():
             "error": "Review message cannot exceed 500 characters"
         }), 400
 
-    if len(message.strip()) < 10:
-        return jsonify({
-            "error": "Review message is too short"
-        }), 400
-
-
     review = Review(
         name=data.get("name"),
         location=data.get("location"),
