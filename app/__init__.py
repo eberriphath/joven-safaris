@@ -14,6 +14,8 @@ from app.routes.admin_dashboard import admin_dashboard_bp
 from app.models.package import Package
 from app.routes.admin_packages import admin_packages_bp
 from app.routes.packages import packages_bp
+from app.utils import cloudinary_config
+from app.routes.admin_upload import admin_upload_bp
 
 def create_app():
     app = Flask(__name__)
@@ -30,6 +32,7 @@ def create_app():
     app.register_blueprint(admin_dashboard_bp ,url_prefix="/api")
     app.register_blueprint(admin_packages_bp, url_prefix="/api")
     app.register_blueprint(packages_bp, url_prefix="/api")
+    app.register_blueprint(admin_upload_bp, url_prefix="/api")
 
 
     db.init_app(app)
