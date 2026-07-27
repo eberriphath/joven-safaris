@@ -123,3 +123,33 @@ END OF BOOKING REQUEST
 
 
     mail.send(msg)
+
+
+
+def send_password_reset_email(email, token):
+
+    reset_link = f"http://localhost:5173/reset-password/{token}"
+
+    msg = Message(
+        subject="Joven Safaris Admin Password Reset",
+        recipients=[email]
+    )
+
+    msg.body = f"""
+Hello,
+
+We received a request to reset your Joven Safaris Admin password.
+
+Click the link below to reset your password:
+
+{reset_link}
+
+This link will expire in 30 minutes.
+
+If you did not request this password reset, simply ignore this email.
+
+Regards,
+Joven Safaris
+"""
+
+    mail.send(msg)

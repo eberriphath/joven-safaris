@@ -17,4 +17,8 @@ class Admin(db.Model):
 
     last_login = db.Column(db.DateTime, nullable=True)
 
+    reset_token = db.Column(db.String(255), nullable=True)
+
+    reset_token_expiry = db.Column(db.DateTime, nullable=True)
+
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
