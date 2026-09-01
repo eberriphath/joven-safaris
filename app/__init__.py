@@ -16,6 +16,7 @@ from app.routes.admin_packages import admin_packages_bp
 from app.routes.packages import packages_bp
 from app.utils import cloudinary_config
 from app.routes.admin_upload import admin_upload_bp
+from app.models.car_rental import CarRental
 
 def create_app():
     app = Flask(__name__)

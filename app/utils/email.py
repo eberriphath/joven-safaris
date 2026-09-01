@@ -7,7 +7,6 @@ from app.extensions import mail
 ADMIN_EMAIL = os.getenv("ADMIN_EMAIL")
 
 
-
 def send_booking_notification(booking):
 
 
@@ -18,6 +17,50 @@ def send_booking_notification(booking):
         recipients=[ADMIN_EMAIL]
 
     )
+
+
+    # =========================
+    # CHILDREN AGES
+    # =========================
+
+    resident_ages = (
+        booking.resident_children_ages
+        or []
+    )
+
+    non_resident_ages = (
+        booking.non_resident_children_ages
+        or []
+    )
+
+
+    # Format resident children ages
+
+    if resident_ages:
+
+        resident_children_ages_text = "\n".join(
+            f"Child {index + 1}: {age} years"
+            for index, age in enumerate(resident_ages)
+        )
+
+    else:
+
+        resident_children_ages_text = "None"
+
+
+
+    # Format non-resident children ages
+
+    if non_resident_ages:
+
+        non_resident_children_ages_text = "\n".join(
+            f"Child {index + 1}: {age} years"
+            for index, age in enumerate(non_resident_ages)
+        )
+
+    else:
+
+        non_resident_children_ages_text = "None"
 
 
 
@@ -80,17 +123,33 @@ Accommodation Preference:
 TRAVELLER INFORMATION
 ---------------------
 
-Resident Adults:
+RESIDENTS
+---------
+
+Adults:
 {booking.resident_adults}
 
-Resident Children:
+Children:
 {booking.resident_children}
 
-Non-Resident Adults:
+
+Resident Children Ages:
+{resident_children_ages_text}
+
+
+
+NON-RESIDENTS
+-------------
+
+Adults:
 {booking.non_resident_adults}
 
-Non-Resident Children:
+Children:
 {booking.non_resident_children}
+
+
+Non-Resident Children Ages:
+{non_resident_children_ages_text}
 
 
 
@@ -125,7 +184,6 @@ END OF BOOKING REQUEST
     mail.send(msg)
 
 
-
 def send_password_reset_email(email, token):
 
     reset_link = f"http://localhost:5173/reset-password/{token}"
@@ -153,3 +211,67 @@ Joven Safaris
 """
 
     mail.send(msg)
+
+
+
+
+def send_booking_confirmation_email(booking):
+
+
+    msg = Message(
+
+        subject="Thank You for Booking with Joven Safaris",
+
+        recipients=[booking.email]
+
+    )
+
+
+    msg.body = f"""
+
+Hello {booking.full_name},
+
+
+Thank you for choosing Joven Safaris.
+
+
+We have successfully received your safari booking request and
+our team is now reviewing the details you provided.
+
+
+BOOKING DETAILS
+---------------
+
+Destination:
+{booking.destination}
+
+Travel Date:
+{booking.travel_date}
+
+Number of Nights:
+{booking.number_of_nights}
+
+Accommodation Preference:
+{booking.accommodation_preference}
+
+
+Your booking request has been received successfully.
+
+A member of the Joven Safaris team will review your request and
+contact you with the next steps and confirmation.
+
+
+If you have any questions or need to make changes to your request,
+please feel free to contact us.
+
+
+We look forward to helping you experience an unforgettable safari.
+
+
+Warm regards,
+
+Joven Safaris
+"""
+    
+    mail.send(msg)
+

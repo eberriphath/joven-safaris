@@ -4,3 +4,11 @@ BOOKING_STATUSES = (
     "rejected",
     "completed"
 )
+
+
+CAR_RENTAL_STATUSES = (
+    "pending",
+    "confirmed",
+    "rejected",
+    "completed"
+)

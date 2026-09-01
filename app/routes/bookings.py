@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 
 from app.models.booking import Booking
 from app.extensions import db
-from app.utils.email import send_booking_notification
+from app.utils.email import send_booking_notification, send_booking_confirmation_email
 
 
 bookings_bp = Blueprint(
@@ -11,12 +11,10 @@ bookings_bp = Blueprint(
 )
 
 
-
 @bookings_bp.route("/book", methods=["POST"])
 def create_booking():
 
     data = request.get_json()
-
 
 
     # =========================
@@ -35,7 +33,6 @@ def create_booking():
     ]
 
 
-
     for field in required_fields:
 
         if not data.get(field):
@@ -47,10 +44,7 @@ def create_booking():
             }), 400
 
 
-
-
     try:
-
 
         # =========================
         # CREATE BOOKING
@@ -58,9 +52,9 @@ def create_booking():
 
         booking = Booking(
 
-
-
+            # =========================
             # PERSONAL INFORMATION
+            # =========================
 
             full_name=data["full_name"],
 
@@ -81,9 +75,9 @@ def create_booking():
             ),
 
 
-
-
+            # =========================
             # TRAVEL INFORMATION
+            # =========================
 
             destination=data["destination"],
 
@@ -102,9 +96,9 @@ def create_booking():
             ),
 
 
-
-
+            # =========================
             # TRAVELLER INFORMATION
+            # =========================
 
             resident_adults=data.get(
                 "resident_adults",
@@ -116,6 +110,12 @@ def create_booking():
                 0
             ),
 
+            resident_children_ages=data.get(
+                "resident_children_ages",
+                []
+            ),
+
+
             non_resident_adults=data.get(
                 "non_resident_adults",
                 0
@@ -126,10 +126,15 @@ def create_booking():
                 0
             ),
 
+            non_resident_children_ages=data.get(
+                "non_resident_children_ages",
+                []
+            ),
 
 
-
+            # =========================
             # EMERGENCY CONTACT
+            # =========================
 
             emergency_contact_name=data.get(
                 "emergency_contact_name"
@@ -144,17 +149,15 @@ def create_booking():
             ),
 
 
-
-
+            # =========================
             # ADDITIONAL
+            # =========================
 
             special_requests=data.get(
                 "special_requests"
             )
 
         )
-
-
 
 
         # =========================
@@ -166,14 +169,21 @@ def create_booking():
         db.session.commit()
 
 
-
+        # =========================
+        # SEND NOTIFICATION
+        # =========================
 
         send_booking_notification(
             booking
         )
 
+        send_booking_confirmation_email(
+            booking
+        )
 
-
+        # =========================
+        # SUCCESS
+        # =========================
 
         return jsonify({
 
@@ -186,11 +196,7 @@ def create_booking():
         }), 201
 
 
-
-
-
     except Exception as e:
-
 
         db.session.rollback()
 
@@ -200,3 +206,4 @@ def create_booking():
             "error": str(e)
 
         }), 500
+

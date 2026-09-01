@@ -84,8 +84,6 @@ class Booking(db.Model):
     )
 
 
-
-
     resident_adults = db.Column(
         db.Integer,
         default=0
@@ -95,6 +93,12 @@ class Booking(db.Model):
     resident_children = db.Column(
         db.Integer,
         default=0
+    )
+
+
+    resident_children_ages = db.Column(
+        db.JSON,
+        nullable=True
     )
 
 
@@ -109,7 +113,10 @@ class Booking(db.Model):
         default=0
     )
 
-
+    non_resident_children_ages = db.Column(
+        db.JSON,
+        nullable=True
+    )
 
 
     emergency_contact_name = db.Column(
