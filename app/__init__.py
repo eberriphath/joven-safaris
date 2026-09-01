@@ -17,6 +17,8 @@ from app.routes.packages import packages_bp
 from app.utils import cloudinary_config
 from app.routes.admin_upload import admin_upload_bp
 from app.models.car_rental import CarRental
+from app.routes.car_rentals import car_rentals_bp
+from app.routes.admin_car_rentals import admin_car_rentals_bp
 
 def create_app():
     app = Flask(__name__)
@@ -34,7 +36,8 @@ def create_app():
     app.register_blueprint(admin_packages_bp, url_prefix="/api")
     app.register_blueprint(packages_bp, url_prefix="/api")
     app.register_blueprint(admin_upload_bp, url_prefix="/api")
-
+    app.register_blueprint(car_rentals_bp, url_prefix="/api")   
+    app.register_blueprint(admin_car_rentals_bp, url_prefix="/api")
 
     db.init_app(app)
     migrate.init_app(app, db)

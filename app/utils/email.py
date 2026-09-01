@@ -275,3 +275,173 @@ Joven Safaris
     
     mail.send(msg)
 
+
+
+def send_car_rental_notification(rental):
+
+    msg = Message(
+        subject="New Car Rental Request",
+        recipients=[ADMIN_EMAIL]
+    )
+
+
+    msg.body = f"""
+
+================================
+NEW CAR RENTAL REQUEST
+================================
+
+
+REQUEST DATE
+------------
+{rental.created_at.strftime("%Y-%m-%d %H:%M")}
+
+
+
+CUSTOMER INFORMATION
+--------------------
+
+Full Name:
+{rental.full_name}
+
+Email:
+{rental.email}
+
+Phone:
+{rental.phone}
+
+
+
+RENTAL INFORMATION
+------------------
+
+Vehicle Type:
+{rental.vehicle_type}
+
+Pickup Location:
+{rental.pickup_location}
+
+Pickup Date:
+{rental.pickup_date}
+
+Pickup Time:
+{rental.pickup_time}
+
+Drop-off Location:
+{rental.dropoff_location}
+
+Drop-off Date:
+{rental.dropoff_date}
+
+Drop-off Time:
+{rental.dropoff_time}
+
+
+
+DRIVER INFORMATION
+------------------
+
+Driver Age:
+{rental.driver_age or "Not provided"}
+
+Driving License Number:
+{rental.driving_license_number or "Not provided"}
+
+License Country:
+{rental.license_country or "Not provided"}
+
+
+
+SPECIAL REQUESTS
+----------------
+
+{rental.special_requests or "None"}
+
+
+
+STATUS
+------
+
+{rental.status}
+
+
+
+================================
+END OF CAR RENTAL REQUEST
+================================
+
+"""
+
+    mail.send(msg)
+
+
+
+def send_car_rental_confirmation_email(rental):
+
+    msg = Message(
+        subject="Thank You for Your Car Rental Request | Joven Safaris",
+        recipients=[rental.email]
+    )
+
+
+    msg.body = f"""
+
+Hello {rental.full_name},
+
+
+Thank you for choosing Joven Safaris for your car rental needs.
+
+
+We have successfully received your car rental request and
+our team is now reviewing the details you provided.
+
+
+CAR RENTAL REQUEST
+------------------
+
+Vehicle Type:
+{rental.vehicle_type}
+
+Pickup Location:
+{rental.pickup_location}
+
+Pickup Date:
+{rental.pickup_date}
+
+Pickup Time:
+{rental.pickup_time}
+
+Drop-off Location:
+{rental.dropoff_location}
+
+Drop-off Date:
+{rental.dropoff_date}
+
+Drop-off Time:
+{rental.dropoff_time}
+
+
+Your rental request has been received successfully.
+
+A member of the Joven Safaris team will review your request
+and contact you regarding availability, pricing, and the
+next steps for your rental.
+
+
+Please note that submitting this request does not yet
+constitute a confirmed vehicle reservation.
+
+
+If you have any questions or need to make changes to your
+request, please feel free to contact us.
+
+
+We look forward to helping make your journey easier.
+
+
+Warm regards,
+
+Joven Safaris
+"""
+    
+    mail.send(msg)
