@@ -30,6 +30,7 @@ def create_app():
         origins=[
             "https://www.jovensafaris.com",
             "https://joven-safaris-admin.onrender.com",
+            "https://admin.jovensafaris.com",
          ]
 )
 
