@@ -25,7 +25,13 @@ def create_app():
     
     app.config.from_object(config)
 
-    CORS(app)
+    CORS(
+        app,
+        origins=[
+            "https://www.jovensafaris.com",
+            "https://joven-safaris-admin.onrender.com",
+         ]
+)
 
     app.register_blueprint(bookings_bp, url_prefix="/api")
     app.register_blueprint(reviews_bp, url_prefix="/api")

@@ -1,5 +1,6 @@
 import os
 
+from flask import current_app
 from flask_mail import Message
 from app.extensions import mail
 
@@ -186,7 +187,7 @@ END OF BOOKING REQUEST
 
 def send_password_reset_email(email, token):
 
-    reset_link = f"http://localhost:5173/reset-password/{token}"
+    reset_link = f"{current_app.config['ADMIN_FRONTEND_URL']}/reset-password/{token}"
 
     msg = Message(
         subject="Joven Safaris Admin Password Reset",
@@ -236,7 +237,10 @@ Thank you for choosing Joven Safaris.
 
 
 We have successfully received your safari booking request and
-our team is now reviewing the details you provided.
+our team is currently reviewing your details.
+We will get back to you with a customised safari quote within the shortest time possible.
+
+Here's a quick summary of your request:
 
 
 BOOKING DETAILS
@@ -255,22 +259,14 @@ Accommodation Preference:
 {booking.accommodation_preference}
 
 
-Your booking request has been received successfully.
-
-A member of the Joven Safaris team will review your request and
-contact you with the next steps and confirmation.
-
-
-If you have any questions or need to make changes to your request,
-please feel free to contact us.
-
-
-We look forward to helping you experience an unforgettable safari.
+If you have any questions or need to make any changes to your request,
+please feel free to reply directly to this email.
 
 
 Warm regards,
 
 Joven Safaris
++254 710 495 461
 """
     
     mail.send(msg)
@@ -393,7 +389,11 @@ Thank you for choosing Joven Safaris for your car rental needs.
 
 
 We have successfully received your car rental request and
-our team is now reviewing the details you provided.
+our team is currently reviewing your details.
+We will get back to you with a customised quote within the shortest time possible.
+
+Here's a quick summary of your request:
+
 
 
 CAR RENTAL REQUEST
@@ -421,13 +421,6 @@ Drop-off Time:
 {rental.dropoff_time}
 
 
-Your rental request has been received successfully.
-
-A member of the Joven Safaris team will review your request
-and contact you regarding availability, pricing, and the
-next steps for your rental.
-
-
 Please note that submitting this request does not yet
 constitute a confirmed vehicle reservation.
 
@@ -436,12 +429,10 @@ If you have any questions or need to make changes to your
 request, please feel free to contact us.
 
 
-We look forward to helping make your journey easier.
-
-
 Warm regards,
 
 Joven Safaris
++254 710 495 461
 """
     
     mail.send(msg)
