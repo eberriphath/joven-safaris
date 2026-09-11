@@ -1,24 +1,30 @@
 import os
 
+import resend
+
 from flask import current_app
-from flask_mail import Message
-from app.extensions import mail
 
 
 ADMIN_EMAIL = os.getenv("ADMIN_EMAIL")
+MAIL_FROM = os.getenv("MAIL_FROM", "bookings@jovensafaris.com")
+
+
+def send_email(recipient, subject, body):
+    """
+    Send an email through the Resend HTTPS API.
+    """
+
+    resend.api_key = current_app.config["RESEND_API_KEY"]
+
+    resend.Emails.send({
+        "from": f"Joven Safaris <{MAIL_FROM}>",
+        "to": [recipient],
+        "subject": subject,
+        "text": body,
+    })
 
 
 def send_booking_notification(booking):
-
-
-    msg = Message(
-
-        subject="New Safari Booking Request",
-
-        recipients=[ADMIN_EMAIL]
-
-    )
-
 
     # =========================
     # CHILDREN AGES
@@ -34,7 +40,6 @@ def send_booking_notification(booking):
         or []
     )
 
-
     # Format resident children ages
 
     if resident_ages:
@@ -47,8 +52,6 @@ def send_booking_notification(booking):
     else:
 
         resident_children_ages_text = "None"
-
-
 
     # Format non-resident children ages
 
@@ -63,9 +66,7 @@ def send_booking_notification(booking):
 
         non_resident_children_ages_text = "None"
 
-
-
-    msg.body = f"""
+    body = f"""
 
 ================================
 NEW SAFARI BOOKING REQUEST
@@ -181,20 +182,21 @@ END OF BOOKING REQUEST
 
 """
 
-
-    mail.send(msg)
+    send_email(
+        ADMIN_EMAIL,
+        "New Safari Booking Request",
+        body
+    )
 
 
 def send_password_reset_email(email, token):
 
-    reset_link = f"{current_app.config['ADMIN_FRONTEND_URL']}/reset-password/{token}"
-
-    msg = Message(
-        subject="Joven Safaris Admin Password Reset",
-        recipients=[email]
+    reset_link = (
+        f"{current_app.config['ADMIN_FRONTEND_URL']}"
+        f"/reset-password/{token}"
     )
 
-    msg.body = f"""
+    body = f"""
 Hello,
 
 We received a request to reset your Joven Safaris Admin password.
@@ -211,24 +213,16 @@ Regards,
 Joven Safaris
 """
 
-    mail.send(msg)
-
-
+    send_email(
+        email,
+        "Joven Safaris Admin Password Reset",
+        body
+    )
 
 
 def send_booking_confirmation_email(booking):
 
-
-    msg = Message(
-
-        subject="Thank You for Booking with Joven Safaris",
-
-        recipients=[booking.email]
-
-    )
-
-
-    msg.body = f"""
+    body = f"""
 
 Hello {booking.full_name},
 
@@ -268,20 +262,17 @@ Warm regards,
 Joven Safaris
 +254 710 495 461
 """
-    
-    mail.send(msg)
 
+    send_email(
+        booking.email,
+        "Thank You for Booking with Joven Safaris",
+        body
+    )
 
 
 def send_car_rental_notification(rental):
 
-    msg = Message(
-        subject="New Car Rental Request",
-        recipients=[ADMIN_EMAIL]
-    )
-
-
-    msg.body = f"""
+    body = f"""
 
 ================================
 NEW CAR RENTAL REQUEST
@@ -368,19 +359,16 @@ END OF CAR RENTAL REQUEST
 
 """
 
-    mail.send(msg)
-
+    send_email(
+        ADMIN_EMAIL,
+        "New Car Rental Request",
+        body
+    )
 
 
 def send_car_rental_confirmation_email(rental):
 
-    msg = Message(
-        subject="Thank You for Your Car Rental Request | Joven Safaris",
-        recipients=[rental.email]
-    )
-
-
-    msg.body = f"""
+    body = f"""
 
 Hello {rental.full_name},
 
@@ -434,5 +422,9 @@ Warm regards,
 Joven Safaris
 +254 710 495 461
 """
-    
-    mail.send(msg)
+
+    send_email(
+        rental.email,
+        "Thank You for Your Car Rental Request | Joven Safaris",
+        body
+    )

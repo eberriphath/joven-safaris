@@ -2,7 +2,10 @@ from flask import Blueprint, request, jsonify
 
 from app.models.booking import Booking
 from app.extensions import db
-from app.utils.email import send_booking_notification, send_booking_confirmation_email
+from app.utils.email import (
+    send_booking_notification,
+    send_booking_confirmation_email
+)
 
 
 bookings_bp = Blueprint(
@@ -16,33 +19,26 @@ def create_booking():
 
     data = request.get_json()
 
-
     # =========================
     # REQUIRED FIELDS
     # =========================
 
     required_fields = [
-
         "full_name",
         "email",
         "phone",
         "passport_number",
         "destination",
         "number_of_nights"
-
     ]
-
 
     for field in required_fields:
 
         if not data.get(field):
 
             return jsonify({
-
                 "error": f"{field} is required"
-
             }), 400
-
 
     try:
 
@@ -74,7 +70,6 @@ def create_booking():
                 "country_of_origin"
             ),
 
-
             # =========================
             # TRAVEL INFORMATION
             # =========================
@@ -95,7 +90,6 @@ def create_booking():
                 "accommodation_preference"
             ),
 
-
             # =========================
             # TRAVELLER INFORMATION
             # =========================
@@ -115,7 +109,6 @@ def create_booking():
                 []
             ),
 
-
             non_resident_adults=data.get(
                 "non_resident_adults",
                 0
@@ -130,7 +123,6 @@ def create_booking():
                 "non_resident_children_ages",
                 []
             ),
-
 
             # =========================
             # EMERGENCY CONTACT
@@ -148,7 +140,6 @@ def create_booking():
                 "emergency_contact_relationship"
             ),
 
-
             # =========================
             # ADDITIONAL
             # =========================
@@ -156,54 +147,61 @@ def create_booking():
             special_requests=data.get(
                 "special_requests"
             )
-
         )
-
 
         # =========================
         # SAVE BOOKING
         # =========================
 
         db.session.add(booking)
-
         db.session.commit()
 
+        # =========================
+        # ADMIN NOTIFICATION EMAIL
+        # =========================
+
+        try:
+
+            send_booking_notification(booking)
+
+        except Exception as e:
+
+            print(
+                f"Failed to send booking notification email: {e}"
+            )
 
         # =========================
-        # SEND NOTIFICATION
+        # CUSTOMER CONFIRMATION EMAIL
         # =========================
 
-        send_booking_notification(
-            booking
-        )
+        try:
 
-        send_booking_confirmation_email(
-            booking
-        )
+            send_booking_confirmation_email(booking)
+
+        except Exception as e:
+
+            print(
+                f"Failed to send booking confirmation email: {e}"
+            )
 
         # =========================
-        # SUCCESS
+        # SUCCESS RESPONSE
         # =========================
 
         return jsonify({
-
-            "message":
-            "Booking received successfully",
-
-            "booking_id":
-            booking.id
-
+            "message": "Booking received successfully",
+            "booking_id": booking.id
         }), 201
-
 
     except Exception as e:
 
+        # =========================
+        # DATABASE / BOOKING ERROR
+        # =========================
+
         db.session.rollback()
 
-
         return jsonify({
-
             "error": str(e)
-
         }), 500
 

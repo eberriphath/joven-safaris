@@ -10,6 +10,8 @@ class config:
 
     ADMIN_FRONTEND_URL = os.getenv("ADMIN_FRONTEND_URL")
 
+    RESEND_API_KEY = os.getenv("RESEND_API_KEY")
+
     MAIL_SERVER = os.getenv("MAIL_SERVER")
     MAIL_PORT = int(os.getenv("MAIL_PORT"))
     MAIL_USE_TLS = os.getenv("MAIL_USE_TLS") == "True"
